@@ -36,3 +36,4 @@ ___
 * In the future, adding additional settings button, and possibly changing placement of existing one
 * Bug: Resizing window/collapsing followed channels tab refreshes favourites highlight
 * Bug: When user's internet connection is extremely slow, favourites highlight might not work
+* Bug: User has to refresh the page in order to update favourites highlight (f.e. when favourite channel just went live)
