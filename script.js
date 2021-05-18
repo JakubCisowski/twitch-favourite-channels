@@ -27,7 +27,8 @@
 
         let text = document.createTextNode("⭐Favourites");
 
-        let node = document.querySelector("#root > div > div.tw-flex.tw-flex-column.tw-flex-nowrap.tw-full-height > nav > div > div.tw-align-items-center.tw-flex.tw-flex-grow-1.tw-flex-shrink-1.tw-full-width.tw-justify-content-end");
+        let node = document.querySelector("#root > div > div.sc-AxjAm.tlQbp > nav > div > div.sc-AxjAm.heIqmc");
+
 
         button.appendChild(text);
         div.appendChild(button);
