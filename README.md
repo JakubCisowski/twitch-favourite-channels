@@ -31,6 +31,3 @@ JS userscript for Twitch.tv - adds functionality to add followed channels to you
 ## Upcoming features, bugfixes
 * Dynamic favourites button placement - now I need to update the selector every now and then
 * Additional settings button, and  changing placement of existing one
-* Bug: Channels visible after expanding the bar are not highlighted
-* Bug: Resizing window/collapsing followed channels tab removes favourites highlight
-* Bug: User has to refresh the page in order to update favourites highlight (f.e. when favourite channel just went live)
