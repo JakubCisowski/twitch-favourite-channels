@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitch Favourite Channels
 // @description  Add twitch channels to your favourites.
-// @version      1.2
+// @version      1.3
 // @author       Jakub Cisowski
 // @include      http://www.twitch.tv/*
 // @include      https://www.twitch.tv/*
@@ -18,7 +18,6 @@
     let backupIntervalDeployed = false;
 
     function styleFavouriteChannels(){
-        console.log("checking");
         let followedChannels = document.querySelectorAll("[data-a-target='side-nav-title']");
         let favouritesStrings = window.localStorage.getItem('favourites').toLowerCase();
         let favouritesArray = favouritesStrings.split(',');
@@ -34,12 +33,11 @@
                 }
             }
 
-            appendSettingsButton();
-
             // Stop refreshing when section is found.
             window.clearInterval(initialIntervalID);
             // Do this only once - after initial styling style every X ms. This prevents multiple bugs which disable styling.
             if(backupIntervalDeployed == false){
+                appendSettingsButton();
                 window.setInterval(styleFavouriteChannels, backupIntervalMs);
             }
             backupIntervalDeployed = true; // Set to true to deploy backup only once.
