@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitch Favourite Channels
-// @description  Add twitch channels to your favourites. While on Twitch: [Inspect element -> Application tab -> On the left: (Storage -> LocalStorage -> twitch.tv) -> Filter 'favourites' -> Input channel names in value tab separated by commas]
-// @version      1.1
+// @description  Add twitch channels to your favourites.
+// @version      1.2
 // @author       Jakub Cisowski
 // @include      http://www.twitch.tv/*
 // @include      https://www.twitch.tv/*
@@ -11,12 +11,14 @@
 (function() {
     'use strict';
 
-    // Waiting 1000ms for page to load properly
-    let intervalID = window.setInterval(styleFavourites, 500);
-    // appendSettingsButton();
+    const initialIntervalMs = 500; // Initial frequency of checking for followed channels section.
+    const backupIntervalMs = 5000; // After initial styling backup interval is deployed to style every few seconds to prevent bugs with styling.
 
-    // Styling favourite channels
-    function styleFavourites(){
+    let initialIntervalID = window.setInterval(styleFavouriteChannels, initialIntervalMs);
+    let backupIntervalDeployed = false;
+
+    function styleFavouriteChannels(){
+        console.log("checking");
         let followedChannels = document.querySelectorAll("[data-a-target='side-nav-title']");
         let favouritesStrings = window.localStorage.getItem('favourites').toLowerCase();
         let favouritesArray = favouritesStrings.split(',');
@@ -26,18 +28,24 @@
             for(let i=0; i<followedChannels.length; i++){
                 if(favouritesArray.includes(followedChannels[i].title.toLowerCase())){
                     followedChannels[i].setAttribute("style", "color: gold!important;");
-                    followedChannels[i].textContent = "⭐" + followedChannels[i].textContent;
+                    if(!followedChannels[i].textContent.includes("⭐")){
+                        followedChannels[i].textContent = "⭐" + followedChannels[i].textContent;
+                    }
                 }
             }
 
             appendSettingsButton();
 
             // Stop refreshing when section is found.
-            window.clearInterval(intervalID);
+            window.clearInterval(initialIntervalID);
+            // Do this only once - after initial styling style every X ms. This prevents multiple bugs which disable styling.
+            if(backupIntervalDeployed == false){
+                window.setInterval(styleFavouriteChannels, backupIntervalMs);
+            }
+            backupIntervalDeployed = true; // Set to true to deploy backup only once.
         }
     }
 
-    // Creating extension settings button and appending it
     function appendSettingsButton(){
         let div = document.createElement("div");
         div.className = "tw-align-self-center tw-flex-grow-0 tw-flex-nowrap tw-flex-shrink-0 tw-mg-x-05";
@@ -45,7 +53,7 @@
         let button = document.createElement("button");
         button.setAttribute("style", "color: gold!important;")
         button.type = "button";
-        button.onclick = changeFavourites;
+        button.onclick = settingsClick;
 
         let text = document.createTextNode("⭐Favourites");
 
@@ -57,8 +65,7 @@
         node.insertBefore(div, node.firstChild);
     }
 
-    // Settings onclick event - changing user's favourites
-    function changeFavourites(){
+    function settingsClick(){
         let isFilled;
         window.localStorage.getItem('favourites') == "null" ? isFilled = false : isFilled = true;
 
