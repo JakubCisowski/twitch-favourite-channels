@@ -29,5 +29,6 @@ JS userscript for Twitch.tv - adds functionality to add followed channels to you
 ![scr3](https://i.imgur.com/0SSITal.png)
 
 ## Upcoming features, bugfixes
+* [Bug] Backup interval doesn't deploy
 * Dynamic favourites button placement - now I need to update the selector every now and then
 * Additional settings button, and  changing placement of existing one
