@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Twitch Favourite Channels
 // @description  Add twitch channels to your favourites.
-// @version      1.3
+// @version      1.4
 // @author       Jakub Cisowski
-// @include      http://www.twitch.tv/*
-// @include      https://www.twitch.tv/*
+// @match        http://www.twitch.tv/*
+// @match        https://www.twitch.tv/*
 // @run-at       document-end
 // ==/UserScript==
 
@@ -12,7 +12,7 @@
     'use strict';
 
     const initialIntervalMs = 500; // Initial frequency of checking for followed channels section.
-    const backupIntervalMs = 5000; // After initial styling backup interval is deployed to style every few seconds to prevent bugs with styling.
+    const backupIntervalMs = 5000; // After initial styling backup interval is deployed to style every few seconds to prevent bugs with styling. Also to update styles whenever channel goes online.
 
     let initialIntervalID = window.setInterval(styleFavouriteChannels, initialIntervalMs);
     let backupIntervalDeployed = false;
@@ -24,6 +24,7 @@
 
         // Check if section is found (user can be switched to broadcast tab).
         if (followedChannels.length > 0){
+            // Change the favourite channels styles in followed channels tab.
             for(let i=0; i<followedChannels.length; i++){
                 if(favouritesArray.includes(followedChannels[i].title.toLowerCase())){
                     followedChannels[i].setAttribute("style", "color: gold!important;");
@@ -35,12 +36,13 @@
 
             // Stop refreshing when section is found.
             window.clearInterval(initialIntervalID);
+
             // Do this only once - after initial styling style every X ms. This prevents multiple bugs which disable styling.
             if(backupIntervalDeployed == false){
+                backupIntervalDeployed = true; // Set to true to deploy backup only once.
                 appendSettingsButton();
                 window.setInterval(styleFavouriteChannels, backupIntervalMs);
             }
-            backupIntervalDeployed = true; // Set to true to deploy backup only once.
         }
     }
 
@@ -55,7 +57,8 @@
 
         let text = document.createTextNode("⭐Favourites");
 
-        let node = document.querySelector("#root > div.Layout-sc-nxg1ff-0.bGJmZt > div.Layout-sc-nxg1ff-0.bSuLAT > nav > div > div.Layout-sc-nxg1ff-0.hWJFll");
+        // For now, node selector should be updated whenever Twitch website layout changes.
+        let node = document.querySelector("#root > div.Layout-sc-1xcs6mc-0.hRpbps > div.Layout-sc-1xcs6mc-0.kBprba > nav > div > div.Layout-sc-1xcs6mc-0.gdKXDc");
 
 
         button.appendChild(text);
